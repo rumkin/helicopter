@@ -1,0 +1,24 @@
+{
+  "name": "helicopter",
+  "version": "0.0.1",
+  "description": "Web application framework",
+  "main":"src/helicopter.js",
+  "bin": "bin/helicopter.js",
+  "devDependencies": {
+    "eslint": "^1.6.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "chalk": "^1.1.1",
+    "co": "^4.6.0",
+    "commander": "^2.8.1",
+    "emoji-favicon": "0.0.1",
+    "express": "^4.13.3",
+    "express-session": "^1.11.3",
+    "glob": "^5.0.15",
+    "mime": "^1.3.4",
+    "multiparty": "^4.1.2",
+    "singular": "^1.0.3",
+    "underscore": "^1.8.3"
+  }
+}
