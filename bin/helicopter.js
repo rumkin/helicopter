@@ -22,10 +22,12 @@ commander
 
         app.init(options);
 
-        app.inject(function(config, server, init) {
+        app.inject(function(init, config, server, socketIo) {
             port = port || config.get('network.port', '8080');
             host = host || config.get('network.host', '0.0.0.0');
+
             server(config.get('http')).listen(port, host, function () {
+                socketIo(this);
                 config.get('verbose') && console.log('Server started at %s:%s', chalk.bold(host), chalk.green(port));
             });
         });
@@ -52,7 +54,7 @@ commander
 
         var args = process.argv.slice(process.argv.indexOf('--') + 1);
 
-        app.inject('commands', function (commands) {
+        app.inject(function (services, commands) {
             var name = command.replace(/\W(.)/g, (m, v) => v.toUpperCase());
 
             if (! commands.hasOwnProperty(name)) {

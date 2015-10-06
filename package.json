@@ -2,10 +2,11 @@
   "name": "helicopter",
   "version": "0.0.1",
   "description": "Web application framework",
-  "main":"src/helicopter.js",
+  "main": "src/helicopter.js",
   "bin": "bin/helicopter.js",
   "devDependencies": {
-    "eslint": "^1.6.0"
+    "eslint": "^1.6.0",
+    "socket.io-client": "^1.3.7"
   },
   "dependencies": {
     "body-parser": "^1.14.1",
@@ -19,6 +20,7 @@
     "mime": "^1.3.4",
     "multiparty": "^4.1.2",
     "singular": "^1.0.3",
+    "socket.io": "^1.3.7",
     "underscore": "^1.8.3"
   }
 }

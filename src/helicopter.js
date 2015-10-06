@@ -2,6 +2,7 @@ var Singular = require('Singular');
 var core = require('./core.js');
 var server = require('./server.js');
 var router = require('./router.js');
+var socketIo = require('./socket-io.js');
 var Error = require('./error.js');
 var inherits = require('util').inherits;
 var glob = require('glob');
@@ -16,6 +17,7 @@ function HelicopterApp(config) {
     this.module(core);
     this.module(server);
     this.module(router);
+    this.module(socketIo);
 }
 
 inherits(HelicopterApp, Singular);
@@ -91,12 +93,6 @@ HelicopterApp.prototype.loadConfig = function (dir) {
     }
 };
 
-HelicopterApp.prototype.controller = function (name) {
-    this.get('controllers');
-    return this.get(name + 'Ctrl');
-};
-
 HelicopterApp.prototype.service = function (name) {
-    this.get('services');
     return this.get(name + 'Service');
 };

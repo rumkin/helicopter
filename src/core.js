@@ -118,6 +118,29 @@ exports.controllers = function(controllersOptions, includeScope) {
    });
 };
 
+exports.eventsOptions = function(config){
+    config.add('events', {
+        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), '/events')
+    });
+    return config.get('events');
+};
+
+exports.events = function(eventsOptions, includeScope) {
+    return collect('*.js', eventsOptions.dir, function(file, basename, ext, dir, root){
+        var event = include(root + '/' + file, includeScope);
+        var name = basename
+            .replace(/-events$/, '')
+            .replace(/\W(.)/g, (m, v) => v.toUpperCase());
+
+        includeScope[name + 'Events'] = event;
+
+        return {
+            key: name,
+            value: event
+        };
+    });
+};
+
 // Application services
 
 exports.servicesOptions = function(config){
@@ -137,12 +160,14 @@ exports.services = function($$, servicesOptions, includeScope) {
 
         var moduleName = basename.replace(/(^|\W)(.)/g, (m,p,v) => v.toUpperCase());
 
+        names.push(moduleName);
         $$.factory(moduleName, moduleExports);
 
         return {key: moduleName, value : moduleExports};
     });
 
     names.forEach(function(name){
+
         Object.defineProperty(includeScope, name, {
             get : function() {
                 return $$.get(name);

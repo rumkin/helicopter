@@ -4,6 +4,7 @@ var chalk = require('chalk');
 var _ = require('underscore');
 var multiparty = require('multiparty');
 var bodyParser = require('body-parser');
+var co = require('co');
 
 exports.server = function($$) {
     return function(options){
@@ -317,7 +318,7 @@ exports.errorsHttp = function(config) {
                     res.status(500);
                     res.write('Error');
 
-                    if (config.debug) {
+                    if (config.get('debug')) {
                         res.write('\n' + (error.stack || error));
                     }
 
