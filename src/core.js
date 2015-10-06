@@ -108,14 +108,17 @@ exports.controllersOptions = function(config){
 };
 
 exports.controllers = function(controllersOptions, includeScope) {
-   return collect('*.js', controllersOptions.dir, function(file, basename, ext, dir, root){
-       var controller = include(root + '/' + file, includeScope);
-       includeScope[basename + 'Ctrl'] = controller;
-       return {
-           key: basename,
+    return collect('*-controller.js', controllersOptions.dir, function(file, basename, ext, dir, root){
+        var controller = include(root + '/' + file, includeScope);
+        var name = basename
+            .replace(/-controller$/, '')
+            .replace(/\W(.)/g, (m, v) => v.toUpperCase());
+        includeScope[basename + 'Controller'] = controller;
+        return {
+           key: name,
            value: controller
-       };
-   });
+        };
+    });
 };
 
 exports.eventsOptions = function(config){
@@ -126,7 +129,7 @@ exports.eventsOptions = function(config){
 };
 
 exports.events = function(eventsOptions, includeScope) {
-    return collect('*.js', eventsOptions.dir, function(file, basename, ext, dir, root){
+    return collect('*-events.js', eventsOptions.dir, function(file, basename, ext, dir, root){
         var event = include(root + '/' + file, includeScope);
         var name = basename
             .replace(/-events$/, '')
@@ -151,7 +154,7 @@ exports.servicesOptions = function(config){
 
 exports.services = function($$, servicesOptions, includeScope) {
     var names = [];
-    var services = collect('*.js', servicesOptions.dir, function(file, basename, ext, dir, root) {
+    var services = collect('*-service.js', servicesOptions.dir, function(file, basename, ext, dir, root) {
         var moduleExports = include(root + '/' + file, includeScope);
 
         if (typeof moduleExports !== 'function') {
