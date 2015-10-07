@@ -3,6 +3,8 @@
 var path = require('path');
 var commander = require('commander');
 var chalk = require('chalk');
+var fs = require('fs');
+var childProcess = require('child_process');
 
 commander
     .command('up [port] [host]')
@@ -50,11 +52,11 @@ commander
         }
 
         app.init(options);
-        app.factory('commands', app.commands.bind(app));
 
         var args = process.argv.slice(process.argv.indexOf('--') + 1);
 
-        app.inject(function (services, commands) {
+        app.inject(function (services) {
+            var commands = app.commands();
             var name = command.replace(/\W(.)/g, (m, v) => v.toUpperCase());
 
             if (! commands.hasOwnProperty(name)) {
@@ -83,6 +85,28 @@ commander
 
             sub.parse(['', '', command].concat(args));
         });
+    });
+
+commander
+    .command('init [dir]')
+    .description('Initialize project structure')
+    .action(function (dir) {
+        var fullpath;
+        if (dir) {
+            fullpath = path.resolve(dir);
+            if (! fs.existsSync(fullpath)) {
+                fs.mkdirSync(fullpath);
+            }
+        } else {
+            fullpath = process.cwd();
+        }
+
+        var sourcepath = path.resolve(__dirname, '../var/template');
+        var files = fs.readdirSync(sourcepath).map((file) => path.join(sourcepath, file));
+        files.unshift('-r');
+        files.push(fullpath);
+
+        var result = childProcess.spawnSync('cp', files);
     });
 
 commander.parse(process.argv);
