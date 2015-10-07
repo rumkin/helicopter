@@ -1,4 +1,4 @@
-var Singular = require('Singular');
+var Singular = require('singular');
 var core = require('./core.js');
 var server = require('./server.js');
 var router = require('./router.js');
