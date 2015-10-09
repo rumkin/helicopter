@@ -13,25 +13,47 @@ exports.findByPath = findByPath;
 exports.replace = replace;
 exports.inspect = inspect;
 exports.toCamelCase = toCamelCase;
+exports.toUpperCamelCase = toUpperCamelCase;
 
+/**
+ * Check if value is an Object (not a null)
+ *
+ * @param  {*}  target Any value to check.
+ * @return {boolean}        True if value is object and not a null.
+ */
 function isObject(target) {
     return target !== null && typeof target === 'object';
 }
 
-function isPlainObject(object){
-    return !! object && typeof object === 'object' && object.constructor === Object;
+/**
+ * Check if value is object and it's prototype constructor is Object.
+ *
+ * @param  {*}  object Any value to check.
+ * @return {boolean}        Return true if target.constructor is Object.
+ */
+function isPlainObject(target){
+    return !! target && typeof target === 'object' && target.constructor === Object;
 }
 
+/**
+ * Check if object has own method.
+ *
+ * @param  {object}  object Target object.
+ * @param  {string}  method Method name.
+ * @return {boolean}        Return true if object has own property with name
+*                           `method` and this property is a function.
+ */
 function hasOwnMethod(object, method) {
     return !! object && object.hasOwnProperty(method) && typeof object[method] === 'function';
 }
 
 /**
  * Deeply merge one object's proeprties to another. Only plain objects could
- * be merged.
+ * be merged. All sources should be an objects. Other types are ignored. If
+ * target is not an object then new object will be returned.
  *
- * @param  {*} target Target value. If not an Object then new object will be returned.
- * @param  {*} source Properties source. Ignored if not an Object.
+ * @param  {object} target Target value. If not an Object then new object will be returned.
+ * @param  {...object} source Properties source. Ignored if not an Object.
  * @return {object}        Target object merged with source.
  */
 function merge(target, source) {
@@ -67,10 +89,12 @@ function merge(target, source) {
 }
 
 /**
- * Append the source properties to the target object.
+ * Append the source properties to the target object. All sources should be an
+ * objects. Other types are ignored. If target is not an object then new object
+ * will be returned.
  *
- * @param  {*} target Target value. If not an Object then new object will be returned.
- * @param  {*} source Properties source. Ignored if not an Object.
+ * @param  {object} target Target value. If not an Object then new object will be returned.
+ * @param  {...object} source Properties source. Ignored if not an Object.
  * @return {object}        Target object extended with source properties.
  */
 function extend(target, source) {
@@ -95,8 +119,8 @@ function extend(target, source) {
 /**
  * Clone object deep. The same as merge but with calling method `clone`.
  *
- * @param  {{}} target Object.
- * @return {{}}} New object cloned from target.
+ * @param  {object target Object.
+ * @return {object} New object cloned from target.
  */
 function cloneDeep(target) {
     if (!target || typeof target !== 'object') {
@@ -133,9 +157,9 @@ function cloneDeep(target) {
 /**
  * Add values from source to target object.
  *
- * @param  {{}} target Target object.
- * @param  {{}} source Source object.
- * @return {{}}        Target object.
+ * @param  {object} target Target object.
+ * @param  {object} source Source object.
+ * @return {object}        Target object.
  */
 function defaults(target, source) {
     if (! isObject(target)) {
@@ -156,8 +180,8 @@ function defaults(target, source) {
 /**
  * Get value from object using dot separated path.
  *
- * @param  {{}} target Object to extract value.
- * @param  {string|array} path   String path or array of segments separated with dot or slash.
+ * @param  {object} target Object to extract value.
+ * @param  {string|string[]} path   String path or array of segments separated with dot or slash.
  * @param  {string} Separator   Path segments separator.
  * @return {*} Return object value or undefined if value not found.
  */
@@ -188,10 +212,11 @@ function findByPath(target, path, separator) {
 }
 
 /**
- * Replace text placeholders.
+ * Replace text placeholders. Replace method understand `$n` as arguments numbers
+ * and `${name}` as the first argument object properties.
  *
  * @param  {string} message Template string.
- * @param  {object|*} values  Values dictionary or value to placehold.
+ * @param  {...*} values  Values dictionary or value to placehold.
  * @return {string}         Result string.
  */
 function replace(message, values) {
@@ -205,14 +230,33 @@ function replace(message, values) {
 
 /**
  * Inspect arguments with colorization.
+ *
+ * @param {...*} arg Any value to dump into console as colorized JS value.
  */
-function inspect() {
+function inspect(arg) {
     var args = Array.prototype.slice.call(arguments).map(function(arg){
         return util.inspect(arg, {colors:true});
     });
     console.log.apply(console, args);
 }
 
+/**
+ * Convert string to camel case.
+ *
+ * @param  {string} str Initial string delimited with non word chars.
+ * @return {string}     camelCased string.
+ */
 function toCamelCase(str) {
-    return str.replace(/\W(.)/g, (m, v) => v.toUpperCase());
+    return str.replace(/\W+(.)/g, (m, v) => v.toUpperCase());
+}
+
+/**
+ * Convert string to upper camel case.
+ *
+ * @param  {string} str Initial string delimited with non word chars.
+ * @return {string}     CamelCased string.
+ */
+function toUpperCamelCase(str) {
+    str = toUpperCamelCase(str);
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }

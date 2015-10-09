@@ -11,6 +11,12 @@ var _ = require('underscore');
 
 module.exports = HelicopterApp;
 
+/**
+ * Helicopter application constructor.
+ *
+ * @param {object} config Configuration object.
+ * @extends Singular
+ */
 function HelicopterApp(config) {
     Singular.call(this, config);
 
@@ -22,8 +28,21 @@ function HelicopterApp(config) {
 
 inherits(HelicopterApp, Singular);
 
+/**
+ * Helicopter error constructor.
+ * @type {HelicopterError}
+ */
 HelicopterApp.Error = Error;
 
+/**
+ * Create new sub class of Helicopter application.
+ *
+ * @param  {string} name  Constructor name.
+ * @param  {object} proto Prototype object. If prototype has property
+ *                        `constructor` then it's prototype will be extended
+ *                        and returned.
+ * @return {HyphenApp}   New HyphenApp extended constructor.
+ */
 HelicopterApp.extend = function (name, proto) {
     if (arguments.length < 2) {
         proto = name;
@@ -66,14 +85,29 @@ HelicopterApp.extend = function (name, proto) {
     return ctor;
 };
 
+/**
+ * Initialize application.
+ */
 HelicopterApp.prototype.init = function () {
     this.loadConfig();
 };
 
+/**
+ * Commands factory.
+ *
+ * @return {object} Return object with commands for cli application.
+ */
 HelicopterApp.prototype.commands = function () {
     return {};
 };
 
+/**
+ * Get configuration with dir name. If dir name not specified then
+ * `config.dir + '/config'` will be used.
+ *
+ * @param  {string} [dir] Configuration directory name.
+ * @return {object}     Configuration object.
+ */
 HelicopterApp.prototype.getConfig = function (dir) {
     dir = path.resolve(this.config.dir, dir || 'config');
     var files = glob.sync('*.js', {cwd: dir});
@@ -83,6 +117,12 @@ HelicopterApp.prototype.getConfig = function (dir) {
     }, {});
 };
 
+/**
+ * Load configuration from directory and append it to existed. This method
+ * loads environment configuration if `env` option is specified in config.
+ *
+ * @param  {string?} [dir] Configuration directory.
+ */
 HelicopterApp.prototype.loadConfig = function (dir) {
     dir = dir || 'config';
     var env = this.config.env;
@@ -93,6 +133,12 @@ HelicopterApp.prototype.loadConfig = function (dir) {
     }
 };
 
+/**
+ * Initialize and returns service by name.
+ *
+ * @param  {string} name Service name.
+ * @return {object}      Service instance.
+ */
 HelicopterApp.prototype.service = function (name) {
     return this.get(name + 'Service');
 };
