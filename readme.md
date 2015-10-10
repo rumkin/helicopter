@@ -42,3 +42,34 @@ Run application in development environment example.
 ```
 helicopter up -e development
 ```
+
+## Filesystem layout
+
+Default layout has 3 separated folders to separate code on levels `api`,
+`config` and `modules`. Basic example:
+
+```
+.
+|-- api
+|   |-- controllers
+|   |   `-- main-controller.js
+|   |-- events
+|   |   `-- main-events.js
+|   |-- models
+|   `-- services
+|   |   `-- print-service.js
+|-- config
+|   |-- app.js
+|   |-- development
+|   |   `-- app.js
+|   |-- events.js
+|   |-- http.js
+|   |-- production
+|   `-- routes.js
+|-- modules
+|-- app.js
+`-- package.json
+```
+
+But you can choose your own layout system with overwriting core modules
+configuration.
