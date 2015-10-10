@@ -101,10 +101,9 @@ exports.includeScope = function(config){
 // Application controllers
 
 exports.controllersOptions = function(config){
-    config.add('controllers', {
-        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), '/controllers')
+    return config.defaults('core.controllers', {
+        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), 'controllers')
     });
-    return config.get('controllers');
 };
 
 exports.controllers = function(controllersOptions, includeScope) {
@@ -122,10 +121,9 @@ exports.controllers = function(controllersOptions, includeScope) {
 };
 
 exports.eventsOptions = function(config){
-    config.add('events', {
-        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), '/events')
+    return config.defaults('core.events', {
+        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), 'events')
     });
-    return config.get('events');
 };
 
 exports.events = function(eventsOptions, includeScope) {
@@ -147,9 +145,9 @@ exports.events = function(eventsOptions, includeScope) {
 // Application services
 
 exports.servicesOptions = function(config){
-    return {
-        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), '/services')
-    };
+    return config.defaults('core.services', {
+        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), 'services')
+    });
 };
 
 exports.services = function($$, servicesOptions, includeScope) {
@@ -182,8 +180,8 @@ exports.services = function($$, servicesOptions, includeScope) {
 };
 
 exports.modelsOptions = function(config){
-    return config.defaults('models', {
-        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), '/models')
+    return config.defaults('core.models', {
+        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), 'models')
     });
 };
 
@@ -212,13 +210,13 @@ exports.models = function(modelsOptions, includeScope) {
 };
 
 exports.responsesOptions = function(config) {
-    return config.defaults('responses', {
-        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), '/responces')
+    return config.defaults('core.responses', {
+        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), 'responces')
     });
 };
 
 exports.responses = function(config, responsesOptions, includeScope) {
-    var options = config.get('responses');
+    var options = config.get('core.responses');
     var dir = path.resolve(config.get('dir'), options.dir);
     return collect('*.js', dir, function(file, basename){
         return {
@@ -231,8 +229,8 @@ exports.responses = function(config, responsesOptions, includeScope) {
 // Policies options
 
 exports.policiesOptions = function(config) {
-    return config.defaults('policies', {
-        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), '/policies')
+    return config.defaults('core.policies', {
+        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), 'policies')
     });
 };
 
@@ -250,8 +248,8 @@ exports.policies = function(policiesOptions, config, includeScope) {
 // Autoload modules options
 
 exports.modulesOptions = function(config) {
-    return config.defaults('modules', {
-        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), '/modules')
+    return config.defaults('core.modules', {
+        dir : path.join(config.get('dir'), 'modules')
     });
 };
 
