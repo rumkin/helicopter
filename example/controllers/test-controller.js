@@ -16,5 +16,13 @@ module.exports = {
         return {
             status: true
         };
+    },
+    generator: function * (req, res) {
+        // Wait until timed out promise does resolve.
+        yield new Promise((resolve, reject) => {
+            setTimeout(resolve, 1000);
+        });
+        // Return data after 1 second timeout.
+        return '1 second ago';
     }
 };
