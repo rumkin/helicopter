@@ -8,6 +8,7 @@ var CoreError = require('./error');
 var express = require('express');
 var co = require('co');
 var helpers = require('./helpers.js');
+var Stream = require('stream');
 
 exports.routesHttp = function(config, policies, routeTypes) {
     return function(server, options) {
@@ -123,12 +124,33 @@ exports.routeTypes = function(config, controllers) {
                 throw new Error('Invalid binding target ' + name);
             }
 
+            function onResult(res, result) {
+                if (result === null) {
+                    return;
+                } else if (_.isString(result)) {
+                    res.end(result);
+                } else if (! _.isObject(result)) {
+                    return;
+                } else if (result instanceof Stream.Readable) {
+                    // Only text mode streaming is allowed
+                    // TODO (rumkin) Add SSE streaming for object mode.
+                    if (! result.objectMode) {
+                        result.pipe(res);
+                    }
+                } else {
+                    res.json(result);
+                }
+            }
+
             if (fn.constructor.name === 'GeneratorFunction') {
                 return function(req, res, next) {
-                    co(fn.call(calls, req, res)).then(null, next).catch(next);
+                    co(fn.call(calls, req, res)).then(onResult.bind(null, res), next).catch(next);
                 };
             } else {
-                return fn.bind(calls);
+                return function(req, res) {
+                    var result = fn.call(calls, req, res);
+                    onResult(res, result);
+                }
             }
         },
         view (options) {
