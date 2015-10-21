@@ -27,7 +27,7 @@ exports.socketIo = function (config, events) {
                         : value;
 
                     var method = helpers.findByPath(events, path);
-                    var context = helpers.findByPath(events, path);
+                    var context = helpers.findByPath(events, path.slice(0, -1));
 
                     if (typeof method !== 'function') {
                         throw new Error('Invalid event binding: ' + path.join('.'));
@@ -35,7 +35,7 @@ exports.socketIo = function (config, events) {
 
                     if (method.constructor.name === 'GeneratorFunction') {
                         socket.on(path.join('.'), function (params, cb) {
-                            co(function () {
+                            co(function * () {
                                 return method.call(context, params);
                             }).then(function (data) {
                                 cb({
