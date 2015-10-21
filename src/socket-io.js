@@ -36,7 +36,7 @@ exports.socketIo = function (config, events) {
                     if (method.constructor.name === 'GeneratorFunction') {
                         socket.on(path.join('.'), function (params, cb) {
                             co(function * () {
-                                return method.call(context, params);
+                                return yield method.call(context, params);
                             }).then(function (data) {
                                 cb({
                                     error: null,
