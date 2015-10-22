@@ -1,3 +1,9 @@
+# 0.1.7
+
+* Add socket.io events.
+* Fix UpperCamelCase helper error.
+* Update socket.io error with HelicopterError and debug output.
+
 # 0.1.2
 
 * Add core components configuration to `core` namespace:

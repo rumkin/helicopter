@@ -1,6 +1,6 @@
 {
   "name": "helicopter",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Web application framework",
   "main": "src/helicopter.js",
   "bin": "bin/helicopter.js",

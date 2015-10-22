@@ -3,6 +3,7 @@
 var _ = require('underscore');
 var helpers = require('./helpers.js');
 var co = require('co');
+var HelicopterError = require('./error.js');
 
 exports.socketIo = function (config, events) {
     return function (server) {
@@ -43,8 +44,14 @@ exports.socketIo = function (config, events) {
                                     data: data
                                 });
                             }).catch(function (error) {
+                                if (error instanceof HelicopterError === false) {
+                                    error = config.get('debug')
+                                        ? error.stack
+                                        : 'Server error';
+                                }
+
                                 cb({
-                                    error: error.stack,
+                                    error: error,
                                     data: null
                                 });
                             });
@@ -58,7 +65,13 @@ exports.socketIo = function (config, events) {
                                 };
 
                                 if (error) {
-                                    result.error = error.stack;
+                                    if (error instanceof HelicopterError === false) {
+                                        error = config.get('debug')
+                                            ? error.stack
+                                            : 'Server error';
+                                    }
+
+                                    result.error = error;
                                 } else {
                                     result.data = data;
                                 }
