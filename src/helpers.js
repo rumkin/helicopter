@@ -247,7 +247,7 @@ function inspect(arg) {
  * @return {string}     camelCased string.
  */
 function toCamelCase(str) {
-    return str.replace(/\W+(.)/g, (m, v) => v.toUpperCase());
+    return str.toLowerCase().replace(/\W+(.)/g, (m, v) => v.toUpperCase());
 }
 
 /**
@@ -257,6 +257,5 @@ function toCamelCase(str) {
  * @return {string}     CamelCased string.
  */
 function toUpperCamelCase(str) {
-    str = toUpperCamelCase(str);
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    return str.charAt(0).toUpperCase() + toCamelCase(str.slice(1));
 }
