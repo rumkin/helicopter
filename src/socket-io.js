@@ -6,6 +6,51 @@ var co = require('co');
 var HelicopterError = require('./error.js');
 
 exports.socketIo = function (config, events) {
+    /**
+     * Socket on error calback generator.
+     *
+     * @param  {Function} done Socket response callback.
+     * @return {Function(Error)} Function to produce socket error response.
+     */
+    function socketOnError(done) {
+        return function(error) {
+            if (error instanceof HelicopterError === false) {
+                if (config.get('debug')) {
+                    error = {
+                        code: 'UNKNOWN_ERROR',
+                        message: error.message,
+                        stack: error.stack
+                    };
+                } else {
+                    error = {
+                        code: 'UNKNOWN_ERROR',
+                        message: 'Server error'
+                    };
+                }
+            }
+
+            done({
+                error: error,
+                data: null
+            });
+        };
+    }
+
+    /**
+     * Socket on data calback generator.
+     *
+     * @param  {Function} done Socket response callback.
+     * @return {Function(*)} Function to produce socket data response.
+     */
+    function socketOnData(done) {
+        return function (data) {
+            done({
+                error: null,
+                data: data
+            });
+        };
+    }
+
     return function (server) {
         var io = require('socket.io')(server);
         var eventsMap = config.get('events');
@@ -36,48 +81,29 @@ exports.socketIo = function (config, events) {
 
                     if (method.constructor.name === 'GeneratorFunction') {
                         socket.on(path.join('.'), function (params, cb) {
+                            var onError = socketOnError(cb);
+                            var onData = socketOnData(cb);
+
                             co(function * () {
                                 return yield method.call(context, params);
-                            }).then(function (data) {
-                                cb({
-                                    error: null,
-                                    data: data
-                                });
-                            }).catch(function (error) {
-                                if (error instanceof HelicopterError === false) {
-                                    error = config.get('debug')
-                                        ? error.stack
-                                        : 'Server error';
-                                }
-
-                                cb({
-                                    error: error,
-                                    data: null
-                                });
-                            });
+                            }).then(onData).catch(onError);
                         });
                     } else {
                         socket.on(path.join('.'), function (params, cb) {
-                            method.call(context, params, function (error, data) {
-                                var result = {
-                                    error: null,
-                                    data: null
-                                };
+                            var onError = socketOnError(cb);
+                            var onData = socketOnData(cb);
 
-                                if (error) {
-                                    if (error instanceof HelicopterError === false) {
-                                        error = config.get('debug')
-                                            ? error.stack
-                                            : 'Server error';
+                            try {
+                                method.call(context, params, function (error, data) {
+                                    if (error) {
+                                        onError(error);
+                                    } else {
+                                        onData(data);
                                     }
-
-                                    result.error = error;
-                                } else {
-                                    result.data = data;
-                                }
-
-                                cb(result);
-                            });
+                                });
+                            } catch (error) {
+                                onError(error);
+                            }
                         });
                     }
                 });

@@ -1,7 +1,9 @@
 exports.events = {
     bind: {
         message: {
-            send: true
+            send: true,
+            error: true,
+            nativeError: true
         }
     }
 };

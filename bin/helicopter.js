@@ -11,6 +11,7 @@ commander
     .description('Start server')
     .option('-e,--env [name]', 'Environment name')
     .option('-v,--verbose', 'Verbose output')
+    .option('-d,--debug', 'Force debug mode')
     .action(function (port, host, options) {
         var App = require(path.join(process.cwd(), './app.js'));
         var app = new App({
@@ -20,6 +21,10 @@ commander
 
         if (options.verbose) {
             app.config.verbose = options.verbose;
+        }
+
+        if (options.debug) {
+            app.config.debug = options.debug;
         }
 
         app.init(options);

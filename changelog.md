@@ -1,3 +1,7 @@
+# 0.1.9
+* Add `debug` cli option.
+* Update events error interface.
+
 # 0.1.7
 
 * Add socket.io events.

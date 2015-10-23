@@ -9,7 +9,10 @@ function HelicopterError(message) {
     this.name = this.constructor.name;
 
     if (this.constructor.hasOwnProperty(message)) {
+        this.code = message;
         message = this.constructor[message];
+    } else {
+        this.code = 'UNKNOWN_ERROR';
     }
 
     this.message = message;
@@ -17,5 +20,11 @@ function HelicopterError(message) {
 
 util.inherits(HelicopterError, Error);
 
+HelicopterError.prototype.toJSON = function () {
+    return {
+        code: this.code,
+        message: this.message
+    };
+};
 HelicopterError.ROUTER_BAD_ACTION = 'Invalid action #{action} for route #{route}.';
 HelicopterError.ROUTER_BAD_METHOD = 'Invalid method #{method} for route #{route}.';
