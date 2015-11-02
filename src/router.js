@@ -12,6 +12,28 @@ var Stream = require('stream');
 
 exports.routesHttp = function(config, policies, routeTypes) {
     return function(server, options) {
+        server.use(function (req, res, next) {
+            if (! res.hasOwnProperty('sendError')) {
+                res.sendError = function (error) {
+                    this.status(500);
+                    if (config.get('debug')) {
+                        if (error instanceof Error) {
+                            error = error.stack;
+                        }
+                        this.end(error);
+                    } else {
+                        this.end('Server Error');
+                    }
+                };
+            }
+
+            if (! res.hasOwnProperty('sendData')) {
+                res.sendData = res.json;
+            }
+
+            next();
+        });
+
         bindRoutes(server, config.get('routes', {}), options);
 
         function bindRoutes(router, routes, options) {
@@ -126,19 +148,25 @@ exports.routeTypes = function(config, controllers) {
 
             function onResult(res, result) {
                 if (result === null) {
-                    return;
+                    res.end();
                 } else if (_.isString(result)) {
                     res.end(result);
                 } else if (! _.isObject(result)) {
-                    return;
+                    res.end();
                 } else if (result instanceof Stream.Readable) {
                     // Only text mode streaming is allowed
-                    // TODO (rumkin) Add SSE streaming for object mode.
                     if (! result.objectMode) {
                         result.pipe(res);
+                    } else {
+                        result.on('data', function (chunk) {
+                            res.write(JSON.stringify(chunk) + '\n');
+                        });
+                        result.on('end', res.end.bind(res));
                     }
+                } else if (result instanceof Error) {
+                    res.sendError(result);
                 } else {
-                    res.json(result);
+                    res.sendData(result);
                 }
             }
 
@@ -148,9 +176,14 @@ exports.routeTypes = function(config, controllers) {
                 };
             } else {
                 return function(req, res) {
-                    var result = fn.call(calls, req, res);
+                    var result;
+                    try {
+                        result = fn.call(calls, req, res);
+                    } catch (err) {
+                        result = err;
+                    }
                     onResult(res, result);
-                }
+                };
             }
         },
         view (options) {

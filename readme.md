@@ -73,3 +73,23 @@ Default layout has 3 separated folders to separate code on levels `api`,
 
 But you can choose your own layout system with overwriting core modules
 configuration.
+
+## Responses
+
+HTTP-interface supports custom response system to provide wide functionality.
+There is two ways of using responses: manual in the code `res.notFound()` or
+automatically by router which will run methods `res.sendError` if controllers
+method returns instance of error and `res.sendData` when method returns an
+object.
+
+All responses are modifiers of response object. Example:
+
+```javascript
+// responses/not-found.js
+module.exports = function(req, res) {
+  return function (message) {
+    this.status(404)
+      .end(message || 'Nothing found');
+  };
+};
+```

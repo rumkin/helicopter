@@ -17,6 +17,9 @@ module.exports = {
             status: true
         };
     },
+    error(req, res) {
+        return new Error('Test error');
+    },
     generator: function * (req, res) {
         // Wait until timed out promise does resolve.
         yield new Promise((resolve, reject) => {

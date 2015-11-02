@@ -211,13 +211,14 @@ exports.models = function(modelsOptions, includeScope) {
 
 exports.responsesOptions = function(config) {
     return config.defaults('core.responses', {
-        dir : path.join(config.get('dir'), config.get('apiDir', 'api'), 'responces')
+        dir : path.join(config.get('apiDir', 'api'), 'responses')
     });
 };
 
 exports.responses = function(config, responsesOptions, includeScope) {
     var options = config.get('core.responses');
     var dir = path.resolve(config.get('dir'), options.dir);
+
     return collect('*.js', dir, function(file, basename){
         return {
             key : basename,

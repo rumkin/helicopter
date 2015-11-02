@@ -5,6 +5,7 @@ var _ = require('underscore');
 var multiparty = require('multiparty');
 var bodyParser = require('body-parser');
 var co = require('co');
+var helpers = require('./helpers.js');
 
 exports.server = function($$) {
     return function(options){
@@ -144,13 +145,14 @@ exports.faviconHttp = function() {
 exports.responsesHttp = function(responses) {
     return function(server) {
         var names = Object.getOwnPropertyNames(responses);
+
         server.use(function (req, res, next){
             names.forEach(function(name){
                 if (name in res) {
                     throw new Error('Response name "' + name + '" already taken.');
                 }
 
-                res[name] = responses[name](req, res);
+                res[helpers.toCamelCase(name)] = responses[name](req, res);
             });
             next();
         });

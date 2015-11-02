@@ -10,5 +10,8 @@ exports.routes = {
     },
     'GET /object': {
         method: 'test.object'
+    },
+    'GET /error': {
+        method: 'test.error'
     }
 };

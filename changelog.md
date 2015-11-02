@@ -1,3 +1,7 @@
+# 0.1.10
+* Add custom response methods for `method` routes: response.sendError and
+  response.sendData.
+
 # 0.1.9
 * Add `debug` cli option.
 * Update events error interface.
