@@ -22,7 +22,7 @@ helicopter init [dir]
 This command create new structure with basic controllers and events.
 
 
-## Run
+## Start server
 
 Application should be started with `up` command:
 
@@ -30,17 +30,65 @@ Application should be started with `up` command:
 helicopter up [port]
 ```
 
-Options:
+### Options
 
 | Name        | Desc                      |
 |:------------|:--------------------------|
 | `v,verbose` | Make output verbose.      |
 | `e,env`     | Specify environment name. |
+| `d,debug`   | Turn debug mode on.       |
 
 Run application in development environment example.
 
 ```
 helicopter up -e development
+```
+
+## Run custom command
+
+Helicopter has cli interface to provide application's api which could be called
+from terminal:
+
+```
+helicopter run <command> -- [...args]
+```
+
+Arguments are parsed automatically with simplified argv parser. It uses full name
+arguments only like `--name[=value]`. Example:
+
+```bash
+helicopter run dump -- --mongo-db=test --dir=./test/ --overwrite
+```
+
+### Options
+
+| Name        | Desc                      |
+|:------------|:--------------------------|
+| `v,verbose` | Make output verbose.      |
+| `e,env`     | Specify environment name. |
+| `d,debug`   | Turn debug mode on.       |
+
+### Example
+
+Commands are specified with `commands` method of main app class stored in `app.js`.
+This method should return dictionary of commands where key is a command name in
+camel case and value is object descriptor of command. This method should
+contains several keys: params, description and action.
+
+```javascript
+Helicopter.extend({
+    commands() {
+        return {
+            print: {
+                params: '[text]',
+                description: 'Print console arguments',
+                action: (text) => {
+                    this.service('Print').print(text);
+                }
+            }
+        };
+    }
+});
 ```
 
 ## Filesystem layout
@@ -82,7 +130,7 @@ automatically by router which will run methods `res.sendError` if controllers
 method returns instance of error and `res.sendData` when method returns an
 object.
 
-All responses are modifiers of response object. Example:
+Response file exports factory which returns new method. Example:
 
 ```javascript
 // responses/not-found.js
@@ -93,3 +141,5 @@ module.exports = function(req, res) {
   };
 };
 ```
+
+__NOTE__! Responses shares scope with whall `api` directory. See Scope sharing.

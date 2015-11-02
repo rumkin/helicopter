@@ -44,6 +44,7 @@ commander
     .command('run <command>')
     .option('-e,--env', 'Environment name')
     .option('-v,--verbose', 'Verbose output')
+    .option('-d,--debug', 'Force debug mode')
     .description('Run custom application command')
     .action(function (command, options) {
         var App = require(path.join(process.cwd(), './app.js'));
