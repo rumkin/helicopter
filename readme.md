@@ -142,4 +142,34 @@ module.exports = function(req, res) {
 };
 ```
 
-__NOTE__! Responses shares scope with whall `api` directory. See Scope sharing.
+__NOTE__! Responses shares scope with whole `api` directory. See wide scope.
+
+## Wide scope
+
+Helicopter use it's own require mechanism which share scope of all files from
+`api` directory and allows to avoid mess of requires or other tricks with using
+initialized modules. This way controllers could access to services by it's name.
+
+Example.
+
+```javascript
+// services/print-service.js
+module.exports = function () {
+  return {
+    print: function (msg) {
+      console.log(msg);
+    }
+  }
+};
+```
+
+Using of print service in controller:
+```javascript
+// controllers/print-controller.js
+module.exports = {
+  print (req, res) {
+    PrintService.print(req.body);
+    res.end();
+  }
+};
+```
