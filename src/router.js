@@ -181,8 +181,17 @@ exports.routeTypes = function(config, controllers) {
                         result = fn.call(calls, req, res);
                     } catch (err) {
                         result = err;
+                        onResult(res, result);
+                        return;
                     }
-                    onResult(res, result);
+
+                    if (result instanceof Promise) {
+                        promise.then(function (data) {
+                            onResult(res, data);
+                        }, function (error) {
+                            onResult(res, error);
+                        });
+                    }
                 };
             }
         },
