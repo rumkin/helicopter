@@ -77,17 +77,17 @@ contains several keys: params, description and action.
 
 ```javascript
 Helicopter.extend({
-    commands() {
-        return {
-            print: {
-                params: '[text]',
-                description: 'Print console arguments',
-                action: (text) => {
-                    this.service('Print').print(text);
-                }
-            }
-        };
-    }
+  commands() {
+    return {
+      print: {
+        params: '[text]',
+        description: 'Print console arguments',
+        action: (text) => {
+          this.service('Print').print(text);
+        }
+      }
+    };
+  }
 });
 ```
 
@@ -121,6 +121,36 @@ Default layout has 3 separated folders to separate code on levels `api`,
 
 But you can choose your own layout system with overwriting core modules
 configuration.
+
+## Controllers
+
+Usually controllers stored in `api/controllers` directory in files with postfix
+`-controller.js`. Each controller file should export an object which methods
+will be used as http methods. Routes could be configured manually in
+`config/routes.js` file and could differ for different environments.
+
+Controller example.
+
+```javascript
+// config/routes.js
+exports.routes = {
+  'GET /hello' : {
+    method: 'test.hello'
+  }
+};
+
+// api/controllers/test.js
+module.exports = {
+  hello(req, res) {
+    res.end('Hello world');
+  }
+};
+```
+
+Controller method also could be a generator thus it will be wrapped with [`co`](http://npmjs.org/packages/co).
+Web controller could return promise and it's result will be used as http output.
+Each return result will be wrapped with customization [responses](#responces)
+(`sendData` and `sendError`).
 
 ## Responses
 

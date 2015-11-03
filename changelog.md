@@ -1,4 +1,7 @@
-# 0.1.13
+# 0.1.15
+* Fix controller return methods result processing. If return is undefined then
+  no processing will be done. If result is an instance of Promise then promise
+  result will be used as an output values.
 * Add custom response methods for `method` routes: response.sendError and
   response.sendData.
 * Add `Events` object to wide scope. This object holds all events objects from

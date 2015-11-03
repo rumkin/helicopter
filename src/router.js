@@ -191,6 +191,8 @@ exports.routeTypes = function(config, controllers) {
                         }, function (error) {
                             onResult(res, error);
                         });
+                    } else if (typeof result !== 'undefined') {
+                        onResult(res, result);
                     }
                 };
             }
