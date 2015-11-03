@@ -1,13 +1,15 @@
 {
   "name": "helicopter",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Web application framework",
   "main": "src/helicopter.js",
   "bin": "bin/helicopter.js",
   "repository": "rumkin/helicopter",
   "devDependencies": {
     "eslint": "^1.6.0",
-    "socket.io-client": "^1.3.7"
+    "mocha": "^2.3.3",
+    "socket.io-client": "^1.3.7",
+    "unit.js": "^2.0.0"
   },
   "dependencies": {
     "body-parser": "^1.14.1",
@@ -23,5 +25,8 @@
     "singular": "^1.0.3",
     "socket.io": "^1.3.7",
     "underscore": "^1.8.3"
+  },
+  "scripts": {
+    "test": "$NODE node_modules/.bin/_mocha -t 10000 test/*.spec.js"
   }
 }

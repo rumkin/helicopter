@@ -1,6 +1,10 @@
-# 0.1.10
+# 0.1.13
 * Add custom response methods for `method` routes: response.sendError and
   response.sendData.
+* Add `Events` object to wide scope. This object holds all events objects from
+  event's directory.
+* Rename events objects with upper camel case.
+* Add promisified call.
 
 # 0.1.9
 * Add `debug` cli option.

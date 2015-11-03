@@ -79,33 +79,24 @@ exports.socketIo = function (config, events) {
                         throw new Error('Invalid event binding: ' + path.join('.'));
                     }
 
+                    var fn;
+
                     if (method.constructor.name === 'GeneratorFunction') {
-                        socket.on(path.join('.'), function (params, cb) {
-                            var onError = socketOnError(cb);
-                            var onData = socketOnData(cb);
-
-                            co(function * () {
+                        fn = function (params) {
+                            return co(function * () {
                                 return yield method.call(context, params);
-                            }).then(onData).catch(onError);
-                        });
+                            });
+                        };
                     } else {
-                        socket.on(path.join('.'), function (params, cb) {
-                            var onError = socketOnError(cb);
-                            var onData = socketOnData(cb);
-
-                            try {
-                                method.call(context, params, function (error, data) {
-                                    if (error) {
-                                        onError(error);
-                                    } else {
-                                        onData(data);
-                                    }
-                                });
-                            } catch (error) {
-                                onError(error);
-                            }
-                        });
+                        fn = helpers.promisify(method, context);
                     }
+
+                    socket.on(path.join('.'), function (params, cb) {
+                        var onError = socketOnError(cb);
+                        var onData = socketOnData(cb);
+
+                        fn(params).then(onData).catch(onError);
+                    });
                 });
             }
 

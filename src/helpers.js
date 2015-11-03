@@ -14,6 +14,7 @@ exports.replace = replace;
 exports.inspect = inspect;
 exports.toCamelCase = toCamelCase;
 exports.toUpperCamelCase = toUpperCamelCase;
+exports.promisify = promisify;
 
 /**
  * Check if value is an Object (not a null)
@@ -258,4 +259,44 @@ function toCamelCase(str) {
  */
 function toUpperCamelCase(str) {
     return str.charAt(0).toUpperCase() + toCamelCase(str.slice(1));
+}
+
+/**
+ * Promisify callback method.
+ *
+ * @param  {function} method Method to wrap into Promise.
+ * @param  {Object=} ctx    This context. If not set then will be used wrapper's this.
+ * @return {function}        Return function with promise interface.
+ */
+function promisify(method, ctx) {
+    if (typeof method !== 'function') {
+        throw new Error('Method should be a function');
+    }
+
+    var hasCtx = false;
+    if (arguments.length > 1) {
+        hasCtx = true;
+    }
+
+    return function () {
+        var args = Array.prototype.slice.call(arguments);
+
+        if (! hasCtx) {
+            ctx = this;
+        }
+
+        return new Promise((resolve, reject) => {
+            var result = method.apply(ctx||null, args.concat(function (error, result) {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            }));
+
+            if (result instanceof Promise) {
+                result.then(resolve, reject);
+            }
+        });
+    };
 }

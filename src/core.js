@@ -127,13 +127,13 @@ exports.eventsOptions = function(config){
 };
 
 exports.events = function(eventsOptions, includeScope) {
+    includeScope.Events = {};
     return collect('*-events.js', eventsOptions.dir, function(file, basename, ext, dir, root){
         var event = include(root + '/' + file, includeScope);
-        var name = basename
-            .replace(/-events$/, '')
-            .replace(/\W(.)/g, (m, v) => v.toUpperCase());
+        var name = helpers.toCamelCase(basename.replace(/-events$/, ''));
 
-        includeScope[name + 'Events'] = event;
+        includeScope.Events[name] = event;
+        includeScope[helpers.toUpperCamelCase(name) + 'Events'] = event;
 
         return {
             key: name,
