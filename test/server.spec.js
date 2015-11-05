@@ -8,7 +8,9 @@ describe('Example server', function () {
     var port = 8080;
 
     before(function () {
-        return server().then(function (_child) {
+        return server({
+            port: port
+        }).then(function (_child) {
             child = _child;
         });
     });
@@ -30,7 +32,6 @@ describe('Example server', function () {
     });
 
     it('Should response on /object with data response', function () {
-        var text = 'hi';
         return fetch(`http://localhost:${port}/object`)
         .then((res) => {
             return res.json();
@@ -44,7 +45,6 @@ describe('Example server', function () {
     });
 
     it('Should response on /throws with error response', function () {
-        var text = 'hi';
         return fetch(`http://localhost:${port}/throws`)
         .then((res) => {
             return res.json();
