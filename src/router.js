@@ -147,9 +147,7 @@ exports.routeTypes = function(config, controllers) {
             }
 
             function onResult(res, result) {
-                if (result === null) {
-                    res.end();
-                } else if (_.isString(result)) {
+                if (_.isString(result)) {
                     res.end(result);
                 } else if (! _.isObject(result)) {
                     res.end();
@@ -172,10 +170,13 @@ exports.routeTypes = function(config, controllers) {
 
             if (fn.constructor.name === 'GeneratorFunction') {
                 return function(req, res, next) {
-                    co(fn.call(calls, req, res)).then(onResult.bind(null, res), next).catch(next);
+                    var sendResponse = onResult.bind(null, res);
+                    co(fn.call(calls, req, res))
+                        .then(sendResponse, sendResponse)
+                        .catch(next);
                 };
             } else {
-                return function(req, res) {
+                return function(req, res, next) {
                     var result;
                     try {
                         result = fn.call(calls, req, res);
@@ -190,7 +191,8 @@ exports.routeTypes = function(config, controllers) {
                             onResult(res, data);
                         }, function (error) {
                             onResult(res, error);
-                        });
+                        })
+                        .catch(next);
                     } else if (typeof result !== 'undefined') {
                         onResult(res, result);
                     }

@@ -36,6 +36,10 @@ commander
             server(config.get('http')).listen(port, host, function () {
                 socketIo(this);
                 config.get('verbose') && console.log('Server started at %s:%s', chalk.bold(host), chalk.green(port));
+
+                if (process.send) {
+                    process.send('up');
+                }
             });
         });
     });
@@ -89,6 +93,9 @@ commander
                 subCmd.action(desc.action);
             });
 
+            if (process.send) {
+                process.send('run');
+            }
             sub.parse(['', '', command].concat(args));
         });
     });

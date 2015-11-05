@@ -1,6 +1,10 @@
 var fs = require('fs');
+var co = require('co');
 
 module.exports = {
+    echo (req, res) {
+        res.end(req.query.text);
+    },
     hello(req, res) {
         PrintService.print('hello');
         res.end('Hello');
@@ -27,5 +31,38 @@ module.exports = {
         });
         // Return data after 1 second timeout.
         return '1 second ago';
+    },
+    throws(req, res) {
+        throw new Error('throws error');
+    },
+    // Call socket.io events via http interface example
+    events: function * (req, res) {
+        if (! config.get('debug')) {
+            res.forbidden();
+            return;
+        }
+
+        var event = req.params.event.split('.');
+
+        var target = Events;
+        while (event.length > 1) {
+            let segment = event.shift();
+            if (! target.hasOwnProperty(segment)) {
+                return res.notFound();
+            }
+
+            if (typeof target[segment] !== 'object') {
+                res.notFound();
+            }
+
+            target = target[segment];
+        }
+
+        var method = target[event.shift()];
+        if (typeof method !== 'function') {
+            return res.notFound();
+        }
+
+        return yield method.call(target, req.body);
     }
 };

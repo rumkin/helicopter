@@ -4,7 +4,14 @@ module.exports = {
     send: function * (params) {
         PrintService.print('Message', params.text);
 
-        return {response: 'got this'};
+        return {got: params.text};
+    },
+    promise: function (params) {
+        return new Promise(function (resolve, reject) {
+            setImmediate(resolve, {
+                got: params.text
+            });
+        });
     },
     error: function * (params) {
         throw new HelicopterError('Test error');

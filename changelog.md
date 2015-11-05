@@ -1,3 +1,8 @@
+# 0.1.17
+* Enhance router response processing.
+* Create basic server tests.
+* Enhance example. 
+
 # 0.1.15
 * Fix controller return methods result processing. If return is undefined then
   no processing will be done. If result is an instance of Promise then promise

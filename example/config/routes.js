@@ -1,4 +1,7 @@
 exports.routes = {
+    'GET /echo': {
+        method: 'test.echo'
+    },
     'GET /hello': {
         method: 'test.hello'
     },
@@ -13,5 +16,11 @@ exports.routes = {
     },
     'GET /error': {
         method: 'test.error'
+    },
+    'GET /throws': {
+        method: 'test.throws'
+    },
+    'POST /events/:event': {
+        method: 'test.events'
     }
 };
