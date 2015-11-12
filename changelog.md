@@ -1,7 +1,11 @@
+# 0.1.19
+* Add socket instance to event method callbacks.
+* Update promise wrapper helper.
+
 # 0.1.17
 * Enhance router response processing.
 * Create basic server tests.
-* Enhance example. 
+* Enhance example.
 
 # 0.1.15
 * Fix controller return methods result processing. If return is undefined then
