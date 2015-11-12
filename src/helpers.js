@@ -273,10 +273,7 @@ function promisify(method, ctx) {
         throw new Error('Method should be a function');
     }
 
-    var hasCtx = false;
-    if (arguments.length > 1) {
-        hasCtx = true;
-    }
+    var hasCtx = (typeof ctx !== 'undefined');
 
     return function () {
         var args = Array.prototype.slice.call(arguments);
