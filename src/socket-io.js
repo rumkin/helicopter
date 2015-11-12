@@ -84,7 +84,7 @@ exports.socketIo = function (config, events) {
                     if (method.constructor.name === 'GeneratorFunction') {
                         fn = function (params) {
                             return co(function * () {
-                                return yield method.call(context, params);
+                                return yield method.call(context, params, socket);
                             });
                         };
                     } else {
@@ -95,7 +95,7 @@ exports.socketIo = function (config, events) {
                         var onError = socketOnError(cb);
                         var onData = socketOnData(cb);
 
-                        fn(params).then(onData).catch(onError);
+                        fn(params, socket).then(onData).catch(onError);
                     });
                 });
             }
