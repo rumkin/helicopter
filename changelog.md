@@ -1,3 +1,6 @@
+# 0.1.20
+* Update `singular` module.
+
 # 0.1.19
 * Add socket instance to event method callbacks.
 * Update promise wrapper helper.
