@@ -133,14 +133,6 @@ exports.uploadHttp = function(config) {
     };
 };
 
-// Favicon generator factory
-exports.faviconHttp = function() {
-    var emojiFavicon = require('emoji-favicon');
-    return function favicon (server, options) {
-       server.use(emojiFavicon(options));
-   };
-};
-
 // Add shorthand methods response
 exports.responsesHttp = function(responses) {
     return function(server) {
