@@ -66,7 +66,7 @@ function isError(object) {
         return true;
     }
 
-    return object.constructor.name.contains('Error');
+    return object.constructor.name.indexOf('Error') > -1;
 }
 
 /**
