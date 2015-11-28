@@ -4,12 +4,16 @@ Is a web application framework inspired by SailsJS.
 
 ## Install
 
-Helicopter prefer to be installed globally.
+Install helicopter via npm.
 
 ```
-npm install helicopter -g
+npm install helicopter
 ```
 
+To have nice cli binary you can also install [helicpoter-cli](https://www.npmjs.com/package/helicopter-cli).
+```
+npm install helicopter-cli -g
+```
 
 ## Initialize project
 
