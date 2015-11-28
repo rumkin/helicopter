@@ -1,3 +1,7 @@
+# 0.1.22
+* Remove `emoji-favicon` from dependencies.
+* Replace `inherits` with `Object.setPrototypeOf` in main class.
+
 # 0.1.20
 * Update `singular` module.
 
