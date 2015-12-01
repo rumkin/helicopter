@@ -6,5 +6,7 @@ exports.events = {
             error: true,
             nativeError: true
         }
-    }
+    },
+    onConnect: 'message.connected',
+    onDisconnect: 'message.disconnected'
 };

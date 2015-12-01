@@ -10,6 +10,7 @@ exports.extend = extend;
 exports.cloneDeep = cloneDeep;
 exports.defaults = defaults;
 exports.findByPath = findByPath;
+exports.findMethodBinding = findMethodBinding;
 exports.replace = replace;
 exports.inspect = inspect;
 exports.toCamelCase = toCamelCase;
@@ -210,6 +211,41 @@ function findByPath(target, path, separator) {
     }
 
     return target[segments[0]];
+}
+
+/**
+ * Bind method with scope.
+ *
+ * @param  {Object} target Target object.
+ * @param  {string|string[]} path   Method path.
+ * @param  {*...} arg   Binding arguments.
+ * @return {function|null} Return null if method not found or property is not a function.
+ */
+function findMethodBinding(target, path) {
+    if (typeof path === 'string') {
+        path = path.split('.');
+    }
+
+    var context;
+    if (path.length > 1) {
+        context = findByPath(target, path.slice(0, -1));
+        if (! isObject(context)) {
+            return;
+        }
+    } else {
+        context = target;
+    }
+
+    var method = context[path[path.length - 1]];
+
+    if (typeof method !== 'function') {
+        return;
+    }
+
+    var args = Array.prototype.slice.call(arguments, 2);
+    args.unshift(context);
+
+    return method.bind.apply(method, args);
 }
 
 /**

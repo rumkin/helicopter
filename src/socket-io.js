@@ -100,7 +100,43 @@ exports.socketIo = function (config, events) {
                 });
             }
 
+            function addListener(event, pointer) {
+                var method = helpers.findMethodBinding(events, pointer);
+
+                if (typeof method !== 'function') {
+                    throw new Error('Method pointer "' + pointer + '" is invalid');
+                }
+
+                socket.on(event, method);
+            }
+
             bind(eventsMap.bind);
+
+            var onConnect = eventsMap.onConnect;
+            if (onConnect) {
+                if (! Array.isArray(onConnect)) {
+                    onConnect = [onConnect];
+                }
+
+                onConnect.forEach(function (pointer) {
+                    var method = helpers.findMethodBinding(events, pointer);
+                    if (typeof method !== 'function') {
+                        throw new Error('Method pointer "' + pointer + '" is invalid');
+                    }
+
+                    method(socket);
+                });
+            }
+
+            if (eventsMap.onDisconnect) {
+                if (Array.isArray(eventsMap.onDisconnect)) {
+                    eventsMap.onDisconnect.forEach(function (pointer) {
+                        addListener('disconnect', pointer);
+                    });
+                } else {
+                    addListener('disconnect', eventsMap.onDisconnect);
+                }
+            }
         });
     };
 };

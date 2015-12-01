@@ -18,5 +18,11 @@ module.exports = {
     },
     nativeError: function * (params) {
         throw new Error('Test error');
+    },
+    connected: function (socket) {
+        console.log('connected');
+    },
+    disconnected: function (socket) {
+        console.log('disconnected');
     }
 };
