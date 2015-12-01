@@ -52,7 +52,8 @@ function hasOwnMethod(object, method) {
 }
 
 /**
- * Check if value is an Error or a error-like object.
+ * Check if value is an Error or a error-like object. It checks is value
+ * an object and if constructor name ends with `Error`.
  *
  * @param  {*}  object Value to check.
  * @return {Boolean}        Returns true if object prototype inherits Error or
@@ -67,7 +68,7 @@ function isError(object) {
         return true;
     }
 
-    return object.constructor.name.contains('Error');
+    return object.constructor.name.slice(-5) === 'Error';
 }
 
 /**
