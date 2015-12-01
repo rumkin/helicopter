@@ -1,3 +1,6 @@
+# 0.1.27
+* Add socket events `connect` and `disconnect` bindings.
+
 # 0.1.22
 * Remove `emoji-favicon` from dependencies.
 * Replace `inherits` with `Object.setPrototypeOf` in main class.
