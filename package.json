@@ -1,9 +1,8 @@
 {
   "name": "helicopter",
-  "version": "0.1.21",
+  "version": "0.1.26",
   "description": "Web application framework",
   "main": "src/helicopter.js",
-  "bin": "bin/helicopter.js",
   "repository": "rumkin/helicopter",
   "devDependencies": {
     "eslint": "^1.6.0",
@@ -17,7 +16,6 @@
     "chalk": "^1.1.1",
     "co": "^4.6.0",
     "commander": "^2.8.1",
-    "emoji-favicon": "0.0.1",
     "express": "^4.13.3",
     "express-session": "^1.11.3",
     "glob": "^5.0.15",

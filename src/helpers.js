@@ -2,7 +2,9 @@
 
 var util = require('util');
 
+exports.isObject = isObject;
 exports.isPlainObject = isPlainObject;
+exports.isError = isError;
 exports.hasOwnMethod = hasOwnMethod;
 exports.extendDeep = merge;
 exports.merge = merge;
@@ -47,6 +49,25 @@ function isPlainObject(target){
  */
 function hasOwnMethod(object, method) {
     return !! object && object.hasOwnProperty(method) && typeof object[method] === 'function';
+}
+
+/**
+ * Check if value is an Error or a error-like object.
+ *
+ * @param  {*}  object Value to check.
+ * @return {Boolean}        Returns true if object prototype inherits Error or
+ * if constructor name contains error.
+ */
+function isError(object) {
+    if (! isObject(object)) {
+        return false;
+    }
+
+    if (object instanceof Error) {
+        return true;
+    }
+
+    return object.constructor.name.contains('Error');
 }
 
 /**

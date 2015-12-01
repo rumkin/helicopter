@@ -1,10 +1,11 @@
+'use strict';
+
 var Singular = require('singular');
 var core = require('./core.js');
 var server = require('./server.js');
 var router = require('./router.js');
 var socketIo = require('./socket-io.js');
 var Error = require('./error.js');
-var inherits = require('util').inherits;
 var glob = require('glob');
 var path = require('path');
 var _ = require('underscore');
@@ -26,7 +27,7 @@ function HelicopterApp(config) {
     this.module(socketIo);
 }
 
-inherits(HelicopterApp, Singular);
+Object.setPrototypeOf(HelicopterApp.prototype, Singular.prototype);
 
 /**
  * Helicopter error constructor.
@@ -65,10 +66,10 @@ HelicopterApp.extend = function (name, proto) {
         });
     }
 
-    inherits(ctor, this);
+    Object.setPrototypeOf(ctor.prototype, this.prototype);
 
     Object.getOwnPropertyNames(proto).forEach(function (name) {
-        if (['constructor'].indexOf(name) > -1) {
+        if (['constructor', 'prototype'].indexOf(name) > -1) {
             return;
         }
 

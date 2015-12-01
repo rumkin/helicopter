@@ -116,7 +116,7 @@ commander
 
         var sourcepath = path.resolve(__dirname, '../var/template');
         var files = fs.readdirSync(sourcepath).map((file) => path.join(sourcepath, file));
-        files.unshift('-r');
+        files.unshift('-p', '-r');
         files.push(fullpath);
 
         var result = childProcess.spawnSync('cp', files);

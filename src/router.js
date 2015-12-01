@@ -161,7 +161,7 @@ exports.routeTypes = function(config, controllers) {
                         });
                         result.on('end', res.end.bind(res));
                     }
-                } else if (result instanceof Error) {
+                } else if (helpers.isError(result)) {
                     res.sendError(result);
                 } else {
                     res.sendData(result);

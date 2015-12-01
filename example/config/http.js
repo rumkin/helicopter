@@ -7,7 +7,6 @@ exports.http = {
         'session',
         'upload',
         'overwriteHeaders',
-        'favicon',
         'routes',
         'errors'
     ],
@@ -20,7 +19,6 @@ exports.http = {
         assets : {
             dir : __dirname + '/../public'
         },
-        favicon: 'smile',
         routes : {
             // Enabled route types:
             // - method for bound methods object
