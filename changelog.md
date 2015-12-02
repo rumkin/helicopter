@@ -1,3 +1,7 @@
+# 0.1.31
+* Add socket event listener `onError`.
+* Update socket event callback: argument #1 is always the socket.
+
 # 0.1.29
 * Check if response headers are sent for generator and promised methods.
 * Fix bugs in helpers.

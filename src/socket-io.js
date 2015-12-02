@@ -112,6 +112,7 @@ exports.socketIo = function (config, events) {
 
             bind(eventsMap.bind);
 
+            // Emit on connect events (could throw)
             var onConnect = eventsMap.onConnect;
             if (onConnect) {
                 if (! Array.isArray(onConnect)) {
@@ -128,13 +129,25 @@ exports.socketIo = function (config, events) {
                 });
             }
 
+            // Bind disconnect events
             if (eventsMap.onDisconnect) {
                 if (Array.isArray(eventsMap.onDisconnect)) {
                     eventsMap.onDisconnect.forEach(function (pointer) {
-                        addListener('disconnect', pointer);
+                        addListener('disconnect', pointer, socket);
                     });
                 } else {
-                    addListener('disconnect', eventsMap.onDisconnect);
+                    addListener('disconnect', eventsMap.onDisconnect, socket);
+                }
+            }
+
+            // Bind socket error listeners
+            if (eventsMap.onError) {
+                if (Array.isArray(eventsMap.onError)) {
+                    eventsMap.onError.forEach(function (pointer) {
+                        addListener('disconnect', pointer, socket);
+                    });
+                } else {
+                    addListener('disconnect', eventsMap.onError, socket);
                 }
             }
         });
