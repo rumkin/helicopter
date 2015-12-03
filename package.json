@@ -1,9 +1,10 @@
 {
   "name": "helicopter",
-  "version": "0.1.31",
+  "version": "0.1.32",
   "description": "Web application framework",
   "main": "src/helicopter.js",
   "repository": "rumkin/helicopter",
+  "license": "MIT",
   "devDependencies": {
     "eslint": "^1.6.0",
     "mocha": "^2.3.3",
