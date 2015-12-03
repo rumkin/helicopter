@@ -6,12 +6,12 @@ Is a web application framework inspired by SailsJS.
 
 Install helicopter via npm.
 
-```
+```shell
 npm install helicopter
 ```
 
 To have nice cli binary you can also install [helicpoter-cli](https://www.npmjs.com/package/helicopter-cli).
-```
+```shell
 npm install helicopter-cli -g
 ```
 
@@ -19,18 +19,23 @@ npm install helicopter-cli -g
 
 Initialize project with `init` command:
 
-```
+```shell
 helicopter init [dir]
 ```
 
-This command create new structure with basic controllers and events.
+This command create new structure with basic structure. To create project from
+template use `create` command which will download template from github or npm:
+
+```shell
+helicopter create helicopterjs/basic .
+```
 
 
 ## Start server
 
 Application should be started with `up` command:
 
-```
+```shell
 helicopter up [port]
 ```
 
@@ -44,7 +49,7 @@ helicopter up [port]
 
 Run application in development environment example.
 
-```
+```shell
 helicopter up -e development
 ```
 
@@ -53,14 +58,14 @@ helicopter up -e development
 Helicopter has cli interface to provide application's api which could be called
 from terminal:
 
-```
+```shell
 helicopter run <command> -- [...args]
 ```
 
 Arguments are parsed automatically with simplified argv parser. It uses full name
 arguments only like `--name[=value]`. Example:
 
-```bash
+```shell
 helicopter run dump -- --mongo-db=test --dir=./test/ --overwrite
 ```
 

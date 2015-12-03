@@ -1,4 +1,6 @@
-# 0.1.31
+# 0.1.33
+* Replace template with template engine.
+* Remove `init` command from helicopter binary. Move it to helicopter-cli.
 * Add socket event listener `onError`.
 * Update socket event callback: argument #1 is always the socket.
 

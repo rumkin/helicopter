@@ -1,6 +1,6 @@
 {
   "name": "helicopter",
-  "version": "0.1.32",
+  "version": "0.1.33",
   "description": "Web application framework",
   "main": "src/helicopter.js",
   "repository": "rumkin/helicopter",
