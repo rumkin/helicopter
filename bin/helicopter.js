@@ -63,7 +63,13 @@ commander
 
         app.init(options);
 
-        var args = process.argv.slice(process.argv.indexOf('--') + 1);
+        var args, i;
+        i = process.argv.indexOf('--');
+        if (i > -1) {
+            args = process.argv.slice(i + 1);
+        } else {
+            args = process.argv.slice(4);
+        }
 
         app.inject(function (services) {
             var commands = app.commands();
@@ -94,9 +100,10 @@ commander
             });
 
             if (process.send) {
-                process.send('run');
+                process.send('exec');
             }
-            sub.parse(['', '', command].concat(args));
+
+            sub.parse(['', '', name].concat(args));
         });
     });
 

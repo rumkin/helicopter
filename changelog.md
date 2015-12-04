@@ -1,4 +1,5 @@
-# 0.1.34
+# 0.1.35
+* Fix `exec` command arguments.
 * Rename bin command `run` into `exec`.
 * Replace template with template engine.
 * Remove `init` command from helicopter binary. Move it to helicopter-cli.
