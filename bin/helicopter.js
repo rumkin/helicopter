@@ -45,7 +45,7 @@ commander
     });
 
 commander
-    .command('run <command>')
+    .command('exec <command>')
     .option('-e,--env', 'Environment name')
     .option('-v,--verbose', 'Verbose output')
     .option('-d,--debug', 'Force debug mode')

@@ -1,4 +1,5 @@
-# 0.1.33
+# 0.1.34
+* Rename bin command `run` into `exec`.
 * Replace template with template engine.
 * Remove `init` command from helicopter binary. Move it to helicopter-cli.
 * Add socket event listener `onError`.

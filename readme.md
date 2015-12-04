@@ -23,7 +23,7 @@ Initialize project with `init` command:
 helicopter init [dir]
 ```
 
-This command create new structure with basic structure. To create project from
+This command create new project with basic structure. To create project from
 template use `create` command which will download template from github or npm:
 
 ```shell
@@ -59,14 +59,14 @@ Helicopter has cli interface to provide application's api which could be called
 from terminal:
 
 ```shell
-helicopter run <command> -- [...args]
+helicopter exec <command> -- [...args]
 ```
 
 Arguments are parsed automatically with simplified argv parser. It uses full name
 arguments only like `--name[=value]`. Example:
 
 ```shell
-helicopter run dump -- --mongo-db=test --dir=./test/ --overwrite
+helicopter exec dump -- --mongo-db=test --dir=./test/ --overwrite
 ```
 
 ### Options
