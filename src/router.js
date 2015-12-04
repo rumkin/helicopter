@@ -172,7 +172,11 @@ exports.routeTypes = function(config, controllers) {
                 return function(req, res, next) {
                     var sendResponse = onResult.bind(null, res);
                     co(fn.call(calls, req, res))
-                        .then(sendResponse, sendResponse)
+                        .then(function(result) {
+                            if (! res.headersSent) {
+                                sendResponse(result);
+                            }
+                        }, sendResponse)
                         .catch(next);
                 };
             } else {

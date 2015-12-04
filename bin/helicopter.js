@@ -100,26 +100,4 @@ commander
         });
     });
 
-commander
-    .command('init [dir]')
-    .description('Initialize project structure')
-    .action(function (dir) {
-        var fullpath;
-        if (dir) {
-            fullpath = path.resolve(dir);
-            if (! fs.existsSync(fullpath)) {
-                fs.mkdirSync(fullpath);
-            }
-        } else {
-            fullpath = process.cwd();
-        }
-
-        var sourcepath = path.resolve(__dirname, '../var/template');
-        var files = fs.readdirSync(sourcepath).map((file) => path.join(sourcepath, file));
-        files.unshift('-p', '-r');
-        files.push(fullpath);
-
-        var result = childProcess.spawnSync('cp', files);
-    });
-
 commander.parse(process.argv);

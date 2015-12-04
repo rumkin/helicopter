@@ -100,7 +100,56 @@ exports.socketIo = function (config, events) {
                 });
             }
 
+            function addListener(event, pointer) {
+                var method = helpers.findMethodBinding(events, pointer);
+
+                if (typeof method !== 'function') {
+                    throw new Error('Method pointer "' + pointer + '" is invalid');
+                }
+
+                socket.on(event, method);
+            }
+
             bind(eventsMap.bind);
+
+            // Emit on connect events (could throw)
+            var onConnect = eventsMap.onConnect;
+            if (onConnect) {
+                if (! Array.isArray(onConnect)) {
+                    onConnect = [onConnect];
+                }
+
+                onConnect.forEach(function (pointer) {
+                    var method = helpers.findMethodBinding(events, pointer);
+                    if (typeof method !== 'function') {
+                        throw new Error('Method pointer "' + pointer + '" is invalid');
+                    }
+
+                    method(socket);
+                });
+            }
+
+            // Bind disconnect events
+            if (eventsMap.onDisconnect) {
+                if (Array.isArray(eventsMap.onDisconnect)) {
+                    eventsMap.onDisconnect.forEach(function (pointer) {
+                        addListener('disconnect', pointer, socket);
+                    });
+                } else {
+                    addListener('disconnect', eventsMap.onDisconnect, socket);
+                }
+            }
+
+            // Bind socket error listeners
+            if (eventsMap.onError) {
+                if (Array.isArray(eventsMap.onError)) {
+                    eventsMap.onError.forEach(function (pointer) {
+                        addListener('disconnect', pointer, socket);
+                    });
+                } else {
+                    addListener('disconnect', eventsMap.onError, socket);
+                }
+            }
         });
     };
 };

@@ -1,3 +1,14 @@
+# 0.1.33
+* Replace template with template engine.
+* Remove `init` command from helicopter binary. Move it to helicopter-cli.
+* Add socket event listener `onError`.
+* Update socket event callback: argument #1 is always the socket.
+
+# 0.1.29
+* Check if response headers are sent for generator and promised methods.
+* Fix bugs in helpers.
+* Add socket events `connect` and `disconnect` bindings.
+
 # 0.1.22
 * Remove `emoji-favicon` from dependencies.
 * Replace `inherits` with `Object.setPrototypeOf` in main class.
