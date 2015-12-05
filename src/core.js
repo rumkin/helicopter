@@ -1,6 +1,8 @@
 'use strict';
 
 var path = require('path');
+var glob = require('glob');
+var _ = require('underscore');
 var collect = require('../lib/collect');
 var include = require('../lib/include');
 var helpers = require('./helpers.js');
@@ -107,17 +109,43 @@ exports.controllersOptions = function(config){
 };
 
 exports.controllers = function(controllersOptions, includeScope) {
-    return collect('*-controller.js', controllersOptions.dir, function(file, basename, ext, dir, root){
-        var controller = include(root + '/' + file, includeScope);
+    var controllers = {};
+    var dir = controllersOptions.dir;
+    var postfix = '-controller.js';
+    var files = glob.sync('*' + postfix, {cwd: dir});
+
+    function loadController(file) {
+        var basename = path.basename(file, postfix);
         var name = basename
             .replace(/-controller$/, '')
             .replace(/\W(.)/g, (m, v) => v.toUpperCase());
-        includeScope[basename + 'Controller'] = controller;
-        return {
-           key: name,
-           value: controller
-        };
+
+        if (controllers.hasOwnProperty(name)) {
+            return controllers[name];
+        }
+
+        var controller = include(path.join(dir, file), includeScope);
+
+        // Extend only plain objects.
+        if (controller.constructor === Object && controller.hasOwnProperty('extends')) {
+            var extension = controller.extends
+                .replace(/[A-Z]/, function(m){
+                    return '-' + m.toLowerCase();
+                });
+
+            _.defaults(controller, loadController(extension + postfix));
+        }
+
+        controllers[name] = controller;
+        includeScope[name + 'Controller'] = controller;
+    }
+
+    files.forEach(function(file){
+        loadController(file);
     });
+
+
+    return controllers;
 };
 
 exports.eventsOptions = function(config){

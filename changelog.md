@@ -1,4 +1,5 @@
-# 0.1.35
+# 0.1.36
+* Add `extend` option for controllers.
 * Fix `exec` command arguments.
 * Rename bin command `run` into `exec`.
 * Replace template with template engine.

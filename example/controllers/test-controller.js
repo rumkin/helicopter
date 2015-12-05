@@ -1,29 +1,33 @@
 var fs = require('fs');
-var co = require('co');
 
 module.exports = {
-    echo (req, res) {
-        res.end(req.query.text);
-    },
+    // Extends default controller
+    extends: 'default',
+
     hello(req, res) {
         PrintService.print('hello');
         res.end('Hello');
     },
+
     text(req, res) {
         return 'Text output';
     },
+
     stream(req, res) {
         res.type('application/json');
         return fs.createReadStream(config.get('dir') + '/package.json');
     },
+
     object(req, res) {
         return {
             status: true
         };
     },
+
     error(req, res) {
         return new Error('Test error');
     },
+
     generator: function * (req, res) {
         // Wait until timed out promise does resolve.
         yield new Promise((resolve, reject) => {
@@ -32,9 +36,11 @@ module.exports = {
         // Return data after 1 second timeout.
         return '1 second ago';
     },
+
     throws(req, res) {
         throw new Error('throws error');
     },
+
     // Call socket.io events via http interface example
     events: function * (req, res) {
         if (! config.get('debug')) {
