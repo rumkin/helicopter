@@ -1,7 +1,10 @@
 {
   "name": "helicopter",
-  "version": "0.1.36",
+  "version": "0.1.37",
   "description": "Web application framework",
+  "keywords":[
+    "app", "api", "network", "application", "framework", "modular", "rest", "web", "http"
+  ],
   "main": "src/helicopter.js",
   "repository": "rumkin/helicopter",
   "license": "MIT",

@@ -1,4 +1,5 @@
-# 0.1.36
+# 0.1.37
+* Add keywords to `package.json`.
 * Add `extend` option for controllers.
 * Fix `exec` command arguments.
 * Rename bin command `run` into `exec`.
