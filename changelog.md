@@ -1,3 +1,7 @@
+# 0.1.38
+* Update `req.upload()`. Uploaded fields assign as `req.body` and uploaded files
+  assign as `req.files`.
+
 # 0.1.37
 * Add keywords to `package.json`.
 * Add `extend` option for controllers.

@@ -117,6 +117,10 @@ exports.uploadHttp = function(config) {
                                 fields: fields,
                                 files: files
                             };
+
+                            req.body = fields;
+                            req.files = files;
+
                             resolve(req.body);
                         }
                     }));
