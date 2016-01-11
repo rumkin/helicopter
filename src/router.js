@@ -173,7 +173,7 @@ exports.routeTypes = function(config, controllers) {
                     var sendResponse = onResult.bind(null, res);
                     co(fn.call(calls, req, res))
                         .then(function(result) {
-                            if (! res.headersSent) {
+                            if (typeof result !== 'undefined' && ! res.headersSent) {
                                 sendResponse(result);
                             }
                         }, sendResponse)

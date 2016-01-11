@@ -1,4 +1,6 @@
-# 0.1.38
+# 0.1.39
+* **Maybe breaking**. Router method result with type `undefined` prevent
+  response sending.
 * Update `req.upload()`. Uploaded fields assign as `req.body` and uploaded files
   assign as `req.files`.
 
