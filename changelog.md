@@ -1,4 +1,7 @@
-# 0.1.39
+# 0.1.42
+* Update Helicopter.Error to use CustomError with placeholders.
+* Update router errors to use Helicopter.Error.
+* Add error spec.
 * **Maybe breaking**. Router method result with type `undefined` prevent
   response sending.
 * Update `req.upload()`. Uploaded fields assign as `req.body` and uploaded files

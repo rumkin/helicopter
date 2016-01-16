@@ -282,8 +282,8 @@ function replace(message, values) {
     var args = Array.prototype.slice.call(arguments, 1);
     return message.replace(/\$(\d+)/g, function (match, n) {
         return args[n];
-    }).replace(/\$\{([a-zA-Z0-9$_]+)\}/g, function (match, name) {
-        return values[name] || '';
+    }).replace(/\$\{([a-zA-Z$_][a-zA-Z0-9$_.]*)\}/g, function (match, name) {
+        return findByPath(values, name, '.') || '';
     });
 }
 

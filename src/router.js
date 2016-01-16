@@ -4,7 +4,7 @@ var path = require('path');
 var fs = require('fs');
 var mime = require('mime');
 var _ = require('underscore');
-var CoreError = require('./error');
+var CoreError = require('./error.js');
 var express = require('express');
 var co = require('co');
 var helpers = require('./helpers.js');
@@ -60,7 +60,10 @@ exports.routesHttp = function(config, policies, routeTypes) {
 
                 method = method.toLowerCase();
                 if (typeof router[method] !== 'function') {
-                    throw new CoreError('ROUTER_BAD_METHOD', {route: route, method: method});
+                    throw new CoreError(
+                        'ROUTER_BAD_METHOD',
+                        {route: route, method: method}
+                    );
                 }
 
                 action = routes[route];
@@ -89,10 +92,13 @@ exports.routesHttp = function(config, policies, routeTypes) {
 
                 if (action.hasOwnProperty('routes')) {
                     if (method !== 'all') {
-                        throw new CoreError('ROUTER_BAD_METHOD', {
-                            route: route,
-                            method: method
-                        });
+                        throw new CoreError(
+                            'ROUTER_BAD_METHOD',
+                            {
+                                route: route,
+                                method: method
+                            }
+                        );
                     }
 
                     subRouter = new express.Router();
@@ -117,7 +123,7 @@ exports.routesHttp = function(config, policies, routeTypes) {
                     }
 
                     if (!cb) {
-                        throw new Error('Invalid route action:' + route);
+                        throw new CoreError('ROUTER_BAD_ACTION', {route});
                     }
 
                     queue.push(cb);

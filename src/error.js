@@ -1,30 +1,15 @@
-var util = require('util');
+'use strict';
+
+var CustomError = require('./custom-error.js');
 
 module.exports = HelicopterError;
 
-function HelicopterError(message) {
-    Error.call(this);
-    Error.captureStackTrace(this, this.constructor);
-
-    this.name = this.constructor.name;
-
-    if (this.constructor.hasOwnProperty(message)) {
-        this.code = message;
-        message = this.constructor[message];
-    } else {
-        this.code = 'UNKNOWN_ERROR';
-    }
-
-    this.message = message;
+function HelicopterError(message, details) {
+    CustomError.call(this, message, details);
 }
 
-util.inherits(HelicopterError, Error);
+CustomError.extend(HelicopterError);
 
-HelicopterError.prototype.toJSON = function () {
-    return {
-        code: this.code,
-        message: this.message
-    };
-};
-HelicopterError.ROUTER_BAD_ACTION = 'Invalid action #{action} for route #{route}.';
-HelicopterError.ROUTER_BAD_METHOD = 'Invalid method #{method} for route #{route}.';
+// Error messages
+HelicopterError.ROUTER_BAD_ACTION = 'Invalid action for route ${route}.';
+HelicopterError.ROUTER_BAD_METHOD = 'Invalid method ${method} for route ${route}.';
