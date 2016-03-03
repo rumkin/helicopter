@@ -4,6 +4,7 @@ module.exports = Helicopter.extend({
     init() {
         this.loadConfig();
         this.config.apiDir = '.';
+        this.module(require('./modules/db.js'));
     },
     commands() {
         return {

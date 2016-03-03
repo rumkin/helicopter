@@ -1,5 +1,6 @@
 exports.init = [
-    'services'
+    'services',
+    'startDb',
 ];
 
 exports.network = {

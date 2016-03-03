@@ -29,17 +29,27 @@ commander
 
         app.init(options);
 
-        app.inject(function(init, config, server, socketIo) {
+        app.inject(function(init, config, server, socketIo, onStart, onExit) {
             port = port || config.get('network.port', '8080');
             host = host || config.get('network.host', '0.0.0.0');
 
-            server(config.get('http')).listen(port, host, function () {
-                socketIo(this);
-                config.get('verbose') && console.log('Server started at %s:%s', chalk.bold(host), chalk.green(port));
+            onStart.then(() => {
+                server(config.get('http')).listen(port, host, function () {
+                    socketIo(this);
+                    config.get('verbose') && console.log('Server started at %s:%s', chalk.bold(host), chalk.green(port));
 
-                if (process.send) {
-                    process.send('up');
-                }
+                    if (process.send) {
+                        process.send('up');
+                    }
+                });
+            });
+
+            process.on('exit SIGINT SIGTERM', function(){
+                onExit.then().catch((error) => {
+                    process.exit(1);
+                }).then(() => {
+                    process.exit();
+                });
             });
         });
     });

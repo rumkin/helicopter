@@ -5,6 +5,7 @@ var core = require('./core.js');
 var server = require('./server.js');
 var router = require('./router.js');
 var socketIo = require('./socket-io.js');
+var awaits = require('./awaits.js');
 var Error = require('./error.js');
 var glob = require('glob');
 var path = require('path');
@@ -25,6 +26,7 @@ function HelicopterApp(config) {
     this.module(server);
     this.module(router);
     this.module(socketIo);
+    this.module(awaits);
 }
 
 Object.setPrototypeOf(HelicopterApp.prototype, Singular.prototype);

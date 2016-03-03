@@ -1,3 +1,8 @@
+# 0.1.44
+* Add `awaits` module.
+* Add async event modules `onStart` and `onExit` based on awaits. Which are rely
+  on server life cycle.
+
 # 0.1.42
 * Update Helicopter.Error to use CustomError with placeholders.
 * Update router errors to use Helicopter.Error.
