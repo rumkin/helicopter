@@ -34,21 +34,26 @@ commander
             host = host || config.get('network.host', '0.0.0.0');
 
             onStart.then(() => {
+                process.on('exit SIGINT SIGTERM', function(){
+                    onExit.then().catch((error) => {
+                        process.exit(1);
+                    }).then(() => {
+                        process.exit();
+                    });
+                });
+
                 server(config.get('http')).listen(port, host, function () {
                     socketIo(this);
-                    config.get('verbose') && console.log('Server started at %s:%s', chalk.bold(host), chalk.green(port));
+
+                    config.get('verbose') && console.log(
+                        'Server started at %s:%s',
+                        chalk.bold(host),
+                        chalk.green(port)
+                    );
 
                     if (process.send) {
                         process.send('up');
                     }
-                });
-            });
-
-            process.on('exit SIGINT SIGTERM', function(){
-                onExit.then().catch((error) => {
-                    process.exit(1);
-                }).then(() => {
-                    process.exit();
                 });
             });
         });

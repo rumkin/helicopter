@@ -1,6 +1,6 @@
 {
   "name": "helicopter",
-  "version": "0.1.44",
+  "version": "0.1.46",
   "description": "Web application framework",
   "keywords":[
     "app", "api", "network", "application", "framework", "modular", "rest", "web", "http"

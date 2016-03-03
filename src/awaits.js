@@ -7,6 +7,9 @@ exports.awaits = function() {
             get started() {
                 return started;
             },
+            get length() {
+                return awaits.length;
+            },
             push() {
                 if (started) {
                     throw new Error('Already started');
