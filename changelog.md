@@ -1,3 +1,6 @@
+# 0.1.47
+* Add socket `onError` and `onData` interceptors.
+
 # 0.1.46
 * Add `awaits` module.
 * Add async event modules `onStart` and `onExit` based on awaits. Which are rely

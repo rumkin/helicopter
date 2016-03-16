@@ -5,7 +5,9 @@ var helpers = require('./helpers.js');
 var co = require('co');
 var HelicopterError = require('./error.js');
 
-exports.socketIo = function (config, events) {
+exports.socketIo = function ($$, config, events) {
+    const DEBUG = config.get('debug');
+
     /**
      * Socket on error calback generator.
      *
@@ -13,24 +15,34 @@ exports.socketIo = function (config, events) {
      * @return {Function(Error)} Function to produce socket error response.
      */
     function socketOnError(done) {
-        return function(error) {
-            if (error instanceof HelicopterError === false) {
-                if (config.get('debug')) {
-                    error = {
-                        code: 'UNKNOWN_ERROR',
-                        message: error.message,
-                        stack: error.stack
-                    };
-                } else {
-                    error = {
-                        code: 'UNKNOWN_ERROR',
-                        message: 'Server error'
-                    };
-                }
-            }
+        var onError = config.get('socketIo.onError');
 
+        if (onError) {
+            onError = $$.get(onError);
+        } else {
+            onError = function(error) {
+                if (error instanceof HelicopterError === false) {
+                    if (DEBUG) {
+                        error = {
+                            code: 'UNKNOWN_ERROR',
+                            message: error.message,
+                            stack: error.stack
+                        };
+                    } else {
+                        error = {
+                            code: 'UNKNOWN_ERROR',
+                            message: 'Server error'
+                        };
+                    }
+                }
+
+                return error;
+            };
+        }
+
+        return function(error) {
             done({
-                error: error,
+                error: onError(error),
                 data: null
             });
         };
@@ -43,10 +55,20 @@ exports.socketIo = function (config, events) {
      * @return {Function(*)} Function to produce socket data response.
      */
     function socketOnData(done) {
+        var onData = config.get('socketIo.onData');
+
+        if (onData) {
+            onData = $$.get(onData);
+        } else {
+            onData = function(data) {
+                return data;
+            };
+        }
+
         return function (data) {
             done({
                 error: null,
-                data: data
+                data: onData(data)
             });
         };
     }
@@ -100,7 +122,7 @@ exports.socketIo = function (config, events) {
                 });
             }
 
-            function addListener(event, pointer) {
+            function addListener(event, pointer, socket) {
                 var method = helpers.findMethodBinding(events, pointer);
 
                 if (typeof method !== 'function') {
