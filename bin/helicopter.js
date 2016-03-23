@@ -55,6 +55,10 @@ commander
                         process.send('up');
                     }
                 });
+            })
+            .catch(error => {
+                console.error(error.stack);
+                process.exit(1);
             });
         });
     });

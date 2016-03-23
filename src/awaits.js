@@ -18,10 +18,6 @@ exports.awaits = function() {
                 awaits.push(...arguments);
             },
             then() {
-                if (started) {
-                    throw new Error('Already started');
-                }
-
                 return (new Promise((resolve, reject) => {
                     var onSuccess, onError;
 
@@ -36,7 +32,7 @@ exports.awaits = function() {
                         try {
                             result = fn();
                         } catch (err) {
-                            reject(err);
+                            onError(err);
                             return;
                         }
 
@@ -50,6 +46,11 @@ exports.awaits = function() {
                     onError = function(error) {
                         reject(error);
                     };
+
+                    if (started) {
+                        onError(new Error('Already started'));
+                        return;
+                    }
 
                     onSuccess();
                 })).then(...arguments);

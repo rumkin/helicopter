@@ -1,5 +1,6 @@
-# 0.1.47
+# 0.1.48
 * Add socket `onError` and `onData` interceptors.
+* Update error handling on `up`.
 
 # 0.1.46
 * Add `awaits` module.
