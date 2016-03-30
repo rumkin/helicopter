@@ -113,12 +113,15 @@ exports.controllers = function(controllersOptions, includeScope) {
     var dir = controllersOptions.dir;
     var postfix = '-controller.js';
     var files = glob.sync('*' + postfix, {cwd: dir});
+    var queue = [];
 
     function loadController(file) {
         var basename = path.basename(file, postfix);
         var name = basename
             .replace(/-controller$/, '')
             .replace(/\W(.)/g, (m, v) => v.toUpperCase());
+
+        queue.push(name);
 
         if (controllers.hasOwnProperty(name)) {
             return controllers[name];
@@ -133,11 +136,17 @@ exports.controllers = function(controllersOptions, includeScope) {
                     return '-' + m.toLowerCase();
                 });
 
+            if (~queue.indexOf(extension)) {
+                throw new HelicopterError(`Cycle dependency: ${queue.join('->')}->${name}`);
+            }
+
             _.defaults(controller, loadController(extension + postfix));
         }
 
         controllers[name] = controller;
         includeScope[name + 'Controller'] = controller;
+
+        queue.pop();
     }
 
     files.forEach(function(file){
