@@ -1,7 +1,8 @@
-# 0.1.49
+# 0.1.50
 * Add socket `onError` and `onData` interceptors.
 * Update error handling on `up`.
 * Add controllers cycle dependency detection.
+* Fix cycle dependency detection error type.
 
 # 0.1.46
 * Add `awaits` module.

@@ -137,7 +137,7 @@ exports.controllers = function(controllersOptions, includeScope) {
                 });
 
             if (~queue.indexOf(extension)) {
-                throw new HelicopterError(`Cycle dependency: ${queue.join('->')}->${name}`);
+                throw new Error('Cycle dependency:' + queue.join('->') + '->' + name);
             }
 
             _.defaults(controller, loadController(extension + postfix));
