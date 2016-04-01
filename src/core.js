@@ -314,3 +314,9 @@ exports.init = function($$, config) {
         return name;
     });
 };
+
+exports.include = function(includeScope) {
+  return function(filepath) {
+    return include(filepath, includeScope);
+  };
+};
