@@ -1,0 +1,8 @@
+# TODO
+
+* Simplify config interface.
+* Rewrite module loader to use promises for module instantiating.
+* Make modular structure ready to became separated into NPM packages.
+* Simplify cli actions creation.
+* Create yeoman templates.
+* Decide how to create modular web controllers and routes.
