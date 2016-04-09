@@ -1,6 +1,7 @@
-# 0.1.53
+# 0.1.54
 * Remove `testHttp` middleware from server.
 * Update `bodyParserHttp` to interpret string as a limit.
+* Update test server to use `DEBUG` env variable for logging output.
 
 # 0.1.51
 * Add socket `onError` and `onData` interceptors.

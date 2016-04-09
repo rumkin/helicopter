@@ -4,16 +4,17 @@ var _ = require('underscore');
 
 module.exports = function (options) {
     options = _.extend({
-        port: 8080,
+        port: process.env.PORT|0 || 8080,
         timeout: 10000
     }, options);
 
     var port = options.port;
 
     return new Promise(function (resolve, reject) {
+        var stdio = process.env.DEBUG ? 'inherit' : null;
         child = spawn(process.argv[0], ['../bin/helicopter.js', 'up', port], {
             cwd: path.resolve(__dirname, '../../example'),
-            stdio: [null, null, null, 'ipc']
+            stdio: [null, stdio, stdio, 'ipc']
         });
 
         child.on('error', function (err) {
