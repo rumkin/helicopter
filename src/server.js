@@ -155,6 +155,7 @@ exports.responsesHttp = function(responses) {
     };
 };
 
+// Session middleware factory
 exports.sessionHttp = function() {
     var session = require('express-session');
     return function(server, options){
@@ -162,29 +163,28 @@ exports.sessionHttp = function() {
     };
 };
 
-exports.testHttp = function(config){
-    return function(server){
-        server.use(config.get('http.options.test'));
-    };
-};
-
 // Body parser
 exports.bodyParserHttp = function() {
     return function(server, options){
-        if (options.json) {
-            server.use(bodyParser.json(options.json === true ? {} : options.json));
-        }
+        ['urlencoded', 'json', 'raw'].forEach(function(type){
+          if (! options[type]) {
+            return;
+          }
 
-        if (options.urlencoded) {
-            server.use(bodyParser.urlencoded(options.urlencoded === true ? {} : options.urlencoded));
-        }
+          var typeOptions = options[type];
+          if (typeOptions === true) {
+            typeOptions = {};
+          }
+          else if (typeof typeOptions === 'string') {
+            typeOptions = {limit: typeOptions};
+          }
 
-        if (options.raw) {
-            server.use(bodyParser.raw(options.raw === true ? {} : options.raw));
-        }
+          server.use(bodyParser[type](typeOptions));
+        });
     };
 };
 
+// Response for specified hosts only
 exports.hostHttp = function() {
     return function(server, options) {
         if (options === true) {
@@ -205,6 +205,7 @@ exports.hostHttp = function() {
     };
 };
 
+// Origin settings allow to configure origin restrictions for each host
 exports.originHttp = function() {
     var url = require('url');
 

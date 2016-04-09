@@ -1,3 +1,7 @@
+# 0.1.53
+* Remove `testHttp` middleware from server.
+* Update `bodyParserHttp` to interpret string as a limit.
+
 # 0.1.51
 * Add socket `onError` and `onData` interceptors.
 * Update error handling on `up`.
