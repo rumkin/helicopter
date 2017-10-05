@@ -153,11 +153,11 @@ exports.routeTypes = function(config, controllers) {
             }
 
             function onResult(res, result) {
-                if (_.isString(result)) {
-                    res.end(result);
-                } else if (! _.isObject(result)) {
-                    res.end();
-                } else if (result instanceof Stream.Readable) {
+                if (res._headerSent) {
+                    return;
+                }
+
+                if (result instanceof Stream.Readable) {
                     // Only text mode streaming is allowed
                     if (! result.objectMode) {
                         result.pipe(res);
@@ -167,43 +167,54 @@ exports.routeTypes = function(config, controllers) {
                         });
                         result.on('end', res.end.bind(res));
                     }
-                } else if (helpers.isError(result)) {
+                } else if (typeof res.sendData === 'function') {
+                    res.sendData(result);
+                } else {
+                    res.end(result);
+                }
+            }
+
+            function onError(res, error) {
+                console.error(error);
+                if (res._headerSent) {
+                    return;
+                }
+
+                if (typeof res.sendError === 'function') {
                     res.sendError(result);
                 } else {
-                    res.sendData(result);
+                    res.status(500).end(error);
                 }
             }
 
             if (fn.constructor.name === 'GeneratorFunction') {
                 return function(req, res, next) {
-                    var sendResponse = onResult.bind(null, res);
                     co(fn.call(calls, req, res))
-                        .then(function(result) {
-                            if (typeof result !== 'undefined' && ! res.headersSent) {
-                                sendResponse(result);
-                            }
-                        }, sendResponse)
-                        .catch(next);
+                    .then(function (data) {
+                        onResult(res, data);
+                    }, function (error) {
+                        onError(res, error);
+                    })
+                    .catch(next);
                 };
             } else {
                 return function(req, res, next) {
-                    var result;
+                    let result;
                     try {
                         result = fn.call(calls, req, res);
                     } catch (err) {
-                        result = err;
-                        onResult(res, result);
+                        onError(res, err);
                         return;
                     }
 
-                    if (result instanceof Promise) {
-                        promise.then(function (data) {
+                    if (typeof result.then === 'function') {
+                        result.then(function (data) {
                             onResult(res, data);
                         }, function (error) {
-                            onResult(res, error);
+                            onError(res, error);
                         })
                         .catch(next);
-                    } else if (typeof result !== 'undefined') {
+                    } else {
                         onResult(res, result);
                     }
                 };
